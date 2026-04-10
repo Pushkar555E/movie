@@ -81,19 +81,19 @@ const Explore = () => {
         </div>
 
         {/* Mood Selector */}
-        <div className="flex flex-wrap gap-4 mb-12 animate-fade-in">
+        <div className="flex flex-wrap gap-4 mb-12 animate-fade-in justify-center md:justify-start">
           {moods.map(mood => (
             <button
               key={mood.id}
               onClick={() => setSelectedMood(selectedMood === mood.id ? '' : mood.id)}
-              className={`flex items-center gap-3 px-6 py-4 rounded-2xl border transition-all duration-300 group ${
+              className={`flex items-center gap-4 px-8 py-5 rounded-3xl border transition-all duration-500 group ${
                 selectedMood === mood.id 
-                  ? 'bg-primary border-primary shadow-lg shadow-primary/20 scale-105' 
-                  : 'bg-zinc-900 border-white/5 hover:border-white/10'
+                  ? 'bg-primary border-primary shadow-2xl shadow-primary/40 scale-105 text-white' 
+                  : 'bg-secondary/40 border-white/5 hover:border-primary/30 text-zinc-400'
               }`}
             >
-              <span className="text-2xl group-hover:scale-125 transition-transform">{mood.icon}</span>
-              <span className={`font-bold uppercase tracking-tighter text-sm ${selectedMood === mood.id ? 'text-white' : 'text-zinc-400'}`}>
+              <span className="text-3xl group-hover:scale-125 transition-transform duration-500">{mood.icon}</span>
+              <span className="font-outfit font-black uppercase tracking-widest text-xs">
                 {mood.name}
               </span>
             </button>
@@ -102,7 +102,7 @@ const Explore = () => {
 
         {/* Filters Panel */}
         {showFilters && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 p-8 glass-card animate-scale-in">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 p-10 glass-card animate-scale-in">
             <div className="space-y-3">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2">
                 <Filter size={12} /> Genre
@@ -110,7 +110,7 @@ const Explore = () => {
               <select 
                 value={selectedGenre}
                 onChange={(e) => setSelectedGenre(e.target.value)}
-                className="w-full bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
+                className="glass-input w-full appearance-none cursor-pointer"
               >
                 <option value="">All Genres</option>
                 {genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
@@ -124,7 +124,7 @@ const Explore = () => {
               <select 
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="w-full bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
+                className="glass-input w-full appearance-none cursor-pointer"
               >
                 <option value="">Any Year</option>
                 {years.map(y => <option key={y} value={y}>{y}</option>)}
@@ -138,7 +138,7 @@ const Explore = () => {
               <select 
                 value={selectedRating}
                 onChange={(e) => setSelectedRating(e.target.value)}
-                className="w-full bg-zinc-900 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
+                className="glass-input w-full appearance-none cursor-pointer"
               >
                 <option value="">Any Rating</option>
                 {[9, 8, 7, 6, 5].map(r => <option key={r} value={r}>{r}+ Stars</option>)}

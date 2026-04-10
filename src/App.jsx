@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MovieProvider } from './context/MovieContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import MovieDetails from './pages/MovieDetails';
@@ -26,9 +27,10 @@ const Footer = () => (
 function App() {
   return (
     <Router>
-      <MovieProvider>
-        <div className="flex flex-col min-h-screen bg-background selection:bg-primary/30 selection:text-primary">
-          <Navbar />
+      <ThemeProvider>
+        <MovieProvider>
+          <div className="flex flex-col min-h-screen bg-background selection:bg-primary/30 selection:text-primary transition-colors duration-500">
+            <Navbar />
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -42,6 +44,7 @@ function App() {
           <Footer />
         </div>
       </MovieProvider>
+      </ThemeProvider>
     </Router>
   );
 }

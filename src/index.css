@@ -4,50 +4,68 @@
 @config "../tailwind.config.js";
 
 @layer base {
+  :root {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+    --primary: 0 72% 51%;
+    --secondary: 240 4% 16%;
+    --glass: 255 255 255 / 0.05;
+    --glass-border: 255 255 255 / 0.1;
+  }
+
+  .light {
+    --background: 0 0% 98%;
+    --foreground: 240 10% 3.9%;
+    --primary: 346 84% 49%;
+    --secondary: 240 5% 90%;
+    --glass: 0 0% 100% / 0.6;
+    --glass-border: 0 0% 0% / 0.05;
+  }
+
   body {
-    @apply bg-background text-white font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased transition-colors duration-500;
   }
 
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-background;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-secondary rounded-full border-2 border-background;
+    @apply bg-primary/20 rounded-full border border-primary/10;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-zinc-700;
+    @apply bg-primary/40;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-2 bg-primary hover:bg-red-700 text-white font-semibold rounded-md transition-all duration-300 transform hover:scale-105 active:scale-95;
+    @apply px-8 py-3 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20 flex items-center justify-center gap-2;
   }
 
   .btn-secondary {
-    @apply px-6 py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-md transition-all duration-300 backdrop-blur-md;
+    @apply px-8 py-3 bg-secondary/80 hover:bg-secondary text-foreground font-bold rounded-xl transition-all duration-300 backdrop-blur-xl border border-white/5 flex items-center justify-center gap-2;
   }
 
   .movie-card {
-    @apply relative overflow-hidden rounded-lg bg-secondary transition-all duration-500 cursor-pointer shadow-lg;
+    @apply relative overflow-hidden rounded-2xl bg-secondary/30 transition-all duration-500 cursor-pointer border border-white/5;
   }
 
   .movie-card:hover {
-    @apply scale-105 z-10 shadow-primary/40 shadow-2xl;
-    box-shadow: 0 0 30px -5px rgba(229, 9, 20, 0.4);
+    @apply scale-[1.03] z-10 shadow-2xl;
+    box-shadow: 0 20px 50px -12px rgba(var(--primary), 0.3);
   }
 
   .movie-card-overlay {
-    @apply absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 transition-all duration-300 flex flex-col justify-end p-4;
-    transform: translateY(10px);
+    @apply absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 transition-all duration-500 flex flex-col justify-end p-5;
+    transform: translateY(20px);
   }
 
   .movie-card:hover .movie-card-overlay {
@@ -56,7 +74,7 @@
   }
 
   .skeleton {
-    @apply bg-zinc-800/50 rounded relative overflow-hidden;
+    @apply bg-secondary/50 rounded-2xl relative overflow-hidden;
   }
 
   .shimmer::after {
@@ -78,18 +96,22 @@
 }
 
 .glass-nav {
-  @apply sticky top-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5;
+  @apply sticky top-0 z-50 bg-background/60 backdrop-blur-2xl border-b border-foreground/5;
 }
 
 .glass-card {
-  @apply bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-2xl;
+  @apply bg-secondary/30 backdrop-blur-2xl border border-white/5 rounded-3xl p-6 shadow-xl;
 }
 
-.text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-400 to-zinc-600;
+.glass-input {
+  @apply bg-secondary/50 border border-white/5 rounded-2xl px-6 py-3 transition-all focus:border-primary focus:bg-secondary/70 outline-none backdrop-blur-xl;
 }
 
 .hero-gradient {
-  background: linear-gradient(to top, #0a0a0a, transparent 50%),
-              linear-gradient(to right, #0a0a0a, transparent 70%);
+  background: linear-gradient(to top, hsl(var(--background)), transparent 60%),
+              linear-gradient(to right, hsl(var(--background)), transparent 80%);
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/80 to-foreground/50;
 }

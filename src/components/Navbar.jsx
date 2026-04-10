@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Popcorn, Bookmark, TrendingUp, Menu, X, Mic } from 'lucide-react';
+import { Search, Popcorn, Bookmark, TrendingUp, Menu, X, Mic, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const Navbar = () => {
+  const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -79,6 +81,13 @@ const Navbar = () => {
                 <Mic size={16} />
             </button>
           </form>
+          <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-secondary/50 border border-white/5 hover:bg-secondary transition-all"
+              title="Toggle Theme"
+          >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
         </div>
 
         {/* Mobile Toggle */}

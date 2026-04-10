@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,9 +8,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#0a0a0a",
-        primary: "#e50914", // Netflix Red
-        secondary: "#1a1a1a",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--background))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--foreground))",
+        },
         accent: "#ffc107",
       },
       fontFamily: {
