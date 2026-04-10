@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+    @apply bg-background text-white font-sans antialiased;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-secondary rounded-full border-2 border-background;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-700;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2 bg-primary hover:bg-red-700 text-white font-semibold rounded-md transition-all duration-300 transform hover:scale-105 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-md transition-all duration-300 backdrop-blur-md;
+  }
+
+  .movie-card {
+    @apply relative overflow-hidden rounded-lg bg-secondary transition-all duration-500 cursor-pointer shadow-lg;
+  }
+
+  .movie-card:hover {
+    @apply scale-105 z-10 shadow-primary/40 shadow-2xl;
+    box-shadow: 0 0 30px -5px rgba(229, 9, 20, 0.4);
+  }
+
+  .movie-card-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 transition-all duration-300 flex flex-col justify-end p-4;
+    transform: translateY(10px);
+  }
+
+  .movie-card:hover .movie-card-overlay {
+    @apply opacity-100;
+    transform: translateY(0);
+  }
+
+  .skeleton {
+    @apply bg-zinc-800/50 rounded relative overflow-hidden;
+  }
+
+  .shimmer::after {
+    @apply absolute inset-0;
+    content: "";
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.glass-nav {
+  @apply sticky top-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5;
+}
+
+.glass-card {
+  @apply bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-2xl;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-400 to-zinc-600;
+}
+
+.hero-gradient {
+  background: linear-gradient(to top, #0a0a0a, transparent 50%),
+              linear-gradient(to right, #0a0a0a, transparent 70%);
+}
