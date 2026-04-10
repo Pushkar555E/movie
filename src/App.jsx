@@ -10,16 +10,16 @@ import Search from './pages/Search';
 import Explore from './pages/Explore';
 
 const Footer = () => (
-  <footer className="py-12 border-t border-white/10 bg-black">
+  <footer className="py-12 border-t border-foreground/5 bg-secondary/20">
     <div className="container mx-auto px-4 text-center">
       <div className="flex items-center justify-center gap-2 mb-4">
         <div className="bg-primary p-1.5 rounded-md">
-           <span className="font-bold text-xs uppercase tracking-tighter">CM</span>
+           <span className="font-bold text-xs uppercase tracking-tighter text-white">CM</span>
         </div>
-        <span className="font-outfit font-bold tracking-tighter">CINE<span className="text-primary">MATCH</span></span>
+        <span className="font-outfit font-bold tracking-tighter text-foreground">CINE<span className="text-primary">MATCH</span></span>
       </div>
-      <p className="text-zinc-500 text-sm">© {new Date().getFullYear()} CineMatch Store. Powered by TMDB API.</p>
-      <p className="text-zinc-600 text-xs mt-2 italic">Crafted with ❤️ for movie lovers.</p>
+      <p className="text-zinc-500 text-sm font-medium">© {new Date().getFullYear()} CineMatch Store. Powered by TMDB API.</p>
+      <p className="text-zinc-600 text-[10px] mt-2 italic font-bold uppercase tracking-widest">Crafted with ❤️ for movie lovers.</p>
     </div>
   </footer>
 );

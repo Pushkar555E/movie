@@ -4,13 +4,23 @@ const MovieContext = createContext();
 
 export const MovieProvider = ({ children }) => {
   const [watchlist, setWatchlist] = useState(() => {
-    const saved = localStorage.getItem('watchlist');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('watchlist');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      console.error("Failed to parse watchlist from localStorage", e);
+      return [];
+    }
   });
 
   const [recentlyViewed, setRecentlyViewed] = useState(() => {
-    const saved = localStorage.getItem('recentlyViewed');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('recentlyViewed');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      console.error("Failed to parse recentlyViewed from localStorage", e);
+      return [];
+    }
   });
 
   useEffect(() => {

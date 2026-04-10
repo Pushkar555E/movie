@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY || ''; // To be added by user in .env
+if (!API_KEY) {
+  console.warn("TMDB API Key is missing! Check your .env file or Vercel environment variables.");
+}
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 

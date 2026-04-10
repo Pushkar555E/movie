@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { movieService } from '../services/tmdb';
 import Hero from '../components/Hero';
 import MovieCard from '../components/MovieCard';
-import { TrendingUp, Film, Award, ChevronRight } from 'lucide-react';
+import { TrendingUp, Film, Award, ChevronRight, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useMovie } from '../context/MovieContext';
 
@@ -27,43 +27,18 @@ const Home = () => {
   const [popular, setPopular] = useState([]);
   const [topRated, setTopRated] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { recentlyViewed } = useMovie();
   const [vibeMovies, setVibeMovies] = useState([]);
   const [vibeTitle, setVibeTitle] = useState('');
 
   useEffect(() => {
-    const fetchVibe = async () => {
-      const hour = new Date().getHours();
-      let genre = '';
-      let title = '';
-      
-      if (hour >= 5 && hour < 12) {
-          genre = '16,35'; // Animation, Comedy
-          title = 'Morning Refresh: Feel Good Hits';
-      } else if (hour >= 12 && hour < 18) {
-          genre = '28,12'; // Action, Adventure
-          title = 'Afternoon Thrill: High Energy Action';
-      } else if (hour >= 18 && hour < 22) {
-          genre = '9648,53'; // Mystery, Thriller
-          title = 'Evening Mystery: Keep You Guessing';
-      } else {
-          genre = '27,878'; // Horror, Sci-Fi
-          title = 'Late Night: Dark & Sci-Fi Wonders';
-      }
-
-      setVibeTitle(title);
-      try {
-        const data = await movieService.discoverMovies({ with_genres: genre, sort_by: 'popularity.desc' });
-        setVibeMovies(data.slice(0, 6));
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchVibe();
-  }, []);
-  useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        
+        // Fetch main sections
         const [trendingData, popularData, topRatedData] = await Promise.all([
           movieService.getTrending(),
           movieService.getPopular(),
@@ -72,8 +47,33 @@ const Home = () => {
         setTrending(trendingData);
         setPopular(popularData);
         setTopRated(topRatedData);
+
+        // Fetch Personalized Vibe
+        const hour = new Date().getHours();
+        let genre = '';
+        let title = '';
+        
+        if (hour >= 5 && hour < 12) {
+            genre = '16,35'; // Animation, Comedy
+            title = 'Morning Refresh: Feel Good Hits';
+        } else if (hour >= 12 && hour < 18) {
+            genre = '28,12'; // Action, Adventure
+            title = 'Afternoon Thrill: High Energy Action';
+        } else if (hour >= 18 && hour < 22) {
+            genre = '9648,53'; // Mystery, Thriller
+            title = 'Evening Mystery: Keep You Guessing';
+        } else {
+            genre = '27,878'; // Horror, Sci-Fi
+            title = 'Late Night: Dark & Sci-Fi Wonders';
+        }
+
+        setVibeTitle(title);
+        const vibeData = await movieService.discoverMovies({ with_genres: genre, sort_by: 'popularity.desc' });
+        setVibeMovies(vibeData.slice(0, 6));
+
       } catch (error) {
         console.error("Error fetching homepage data:", error);
+        setError("Failed to connect to the database. Please check your API key.");
       } finally {
         setLoading(false);
       }
@@ -81,6 +81,26 @@ const Home = () => {
 
     fetchData();
   }, []);
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="glass-card text-center max-w-md animate-scale-in">
+          <div className="bg-primary/20 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+            <Film className="text-primary" size={32} />
+          </div>
+          <h2 className="text-2xl font-outfit font-black uppercase tracking-tighter mb-4">Signal Lost</h2>
+          <p className="text-zinc-500 mb-8 font-medium">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="btn-primary w-full"
+          >
+            Reconnect Terminal
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">

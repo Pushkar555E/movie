@@ -3,14 +3,30 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+@theme {
+  --color-background: hsl(240 10% 4%);
+  --color-foreground: hsl(0 0% 98%);
+  --color-primary: hsl(0 72% 51%);
+  --color-secondary: hsl(240 4% 16%);
+  --color-accent: #ffc107;
+  --color-glass: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+
+  --font-sans: 'Inter', sans-serif;
+  --font-outfit: 'Outfit', sans-serif;
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+}
+
 @layer base {
   :root {
     --background: 240 10% 4%;
     --foreground: 0 0% 98%;
     --primary: 0 72% 51%;
     --secondary: 240 4% 16%;
-    --glass: 255 255 255 / 0.05;
-    --glass-border: 255 255 255 / 0.1;
   }
 
   .light {
@@ -18,8 +34,6 @@
     --foreground: 240 10% 3.9%;
     --primary: 346 84% 49%;
     --secondary: 240 5% 90%;
-    --glass: 0 0% 100% / 0.6;
-    --glass-border: 0 0% 0% / 0.05;
   }
 
   body {
