@@ -45,6 +45,21 @@ export const movieService = {
   getGenres: async () => {
     const response = await tmdbApi.get('/genre/movie/list');
     return response.data.genres;
+  },
+
+  getReviews: async (id) => {
+      const response = await tmdbApi.get(`/movie/${id}/reviews`);
+      return response.data.results;
+  },
+
+  discoverMovies: async (params) => {
+      const response = await tmdbApi.get('/discover/movie', { params });
+      return response.data.results;
+  },
+
+  searchPeople: async (query) => {
+      const response = await tmdbApi.get(`/search/person?query=${encodeURIComponent(query)}`);
+      return response.data.results;
   }
 };
 

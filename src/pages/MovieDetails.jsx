@@ -13,14 +13,20 @@ const MovieDetails = () => {
   const [loading, setLoading] = useState(true);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [smartRecs, setSmartRecs] = useState([]);
-  const { isInWatchlist, addToWatchlist, removeFromWatchlist } = useMovie();
+  const [reviews, setReviews] = useState([]);
+  const { isInWatchlist, addToWatchlist, removeFromWatchlist, addToRecentlyViewed } = useMovie();
 
   useEffect(() => {
     const fetchDetails = async () => {
       setLoading(true);
       try {
-        const data = await movieService.getMovieDetails(id);
+        const [data, reviewData] = await Promise.all([
+          movieService.getMovieDetails(id),
+          movieService.getReviews(id)
+        ]);
+        
         setMovie(data);
+        setReviews(reviewData.slice(0, 3));
         addToRecentlyViewed(data);
         
         // Combine Similar and Recommendations for the Smart Engine
@@ -119,6 +125,24 @@ const MovieDetails = () => {
                     {alreadyInWatchlist ? <Check size={24} /> : <Bookmark size={24} />}
                     {alreadyInWatchlist ? 'Watchlisted' : 'Save to Watchlist'}
                   </button>
+                  <button 
+                    onClick={() => {
+                        const shareData = {
+                            title: movie.title,
+                            text: movie.overview,
+                            url: window.location.href,
+                        };
+                        if (navigator.share) {
+                            navigator.share(shareData);
+                        } else {
+                            navigator.clipboard.writeText(window.location.href);
+                            alert("Link copied to clipboard!");
+                        }
+                    }}
+                    className="p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors"
+                  >
+                    <Star size={24} /> {/* Using Star as a placeholder for share or just add share icon */}
+                  </button>
                 </div>
               </div>
            </div>
@@ -184,6 +208,34 @@ const MovieDetails = () => {
                 </div>
               ))}
             </div>
+          </section>
+
+          {/* User Reviews */}
+          <section>
+             <div className="flex items-center gap-3 mb-8">
+                <Star className="text-primary" size={24} />
+                <h2 className="text-2xl font-outfit font-black uppercase tracking-tighter">Fan Perspective</h2>
+             </div>
+             <div className="space-y-6">
+               {reviews.length > 0 ? (
+                 reviews.map(review => (
+                   <div key={review.id} className="p-6 bg-zinc-900/50 rounded-2xl border border-white/5 shadow-xl">
+                      <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white uppercase">
+                              {review.author?.charAt(0)}
+                          </div>
+                          <div>
+                              <h4 className="font-bold text-sm text-white">{review.author}</h4>
+                              <p className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Verified Reviewer</p>
+                          </div>
+                      </div>
+                      <p className="text-zinc-300 text-sm italic leading-relaxed line-clamp-6">"{review.content}"</p>
+                   </div>
+                 ))
+               ) : (
+                 <p className="text-zinc-500 italic">No reviews yet for this masterpiece.</p>
+               )}
+             </div>
           </section>
         </div>
 

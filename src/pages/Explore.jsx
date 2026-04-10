@@ -10,7 +10,16 @@ const Explore = () => {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedRating, setSelectedRating] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
+  const [selectedMood, setSelectedMood] = useState('');
+  const [showFilters, setShowFilters] = useState(true);
+
+  const moods = [
+    { name: 'Popcorn & Fun', id: '16,35', icon: '🍿' },
+    { name: 'Adrenaline Rush', id: '28,12', icon: '🔥' },
+    { name: 'Tear Jerker', id: '18,10749', icon: '😭' },
+    { name: 'Pure Terror', id: '27,53', icon: '😱' },
+    { name: 'Brain Food', id: '878,9648', icon: '🧠' },
+  ];
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -28,23 +37,15 @@ const Explore = () => {
     const fetchFilteredMovies = async () => {
       setLoading(true);
       try {
-        // We'll use the discover endpoint for filters
-        // For simplicity with the existing service, we'll fetch popular and filter locally for now
-        // OR I can add a discover method to movieService
-        const response = await movieService.getPopular(); 
+        const params = {
+            with_genres: selectedMood || selectedGenre,
+            primary_release_year: selectedYear,
+            'vote_average.gte': selectedRating,
+            sort_by: 'popularity.desc'
+        };
         
-        let filtered = response;
-        if (selectedGenre) {
-          filtered = filtered.filter(m => m.genre_ids.includes(parseInt(selectedGenre)));
-        }
-        if (selectedYear) {
-          filtered = filtered.filter(m => m.release_date?.startsWith(selectedYear));
-        }
-        if (selectedRating) {
-          filtered = filtered.filter(m => m.vote_average >= parseFloat(selectedRating));
-        }
-        
-        setMovies(filtered);
+        const data = await movieService.discoverMovies(params);
+        setMovies(data);
       } catch (error) {
         console.error("Error filtering movies:", error);
       } finally {
@@ -53,7 +54,7 @@ const Explore = () => {
     };
 
     fetchFilteredMovies();
-  }, [selectedGenre, selectedYear, selectedRating]);
+  }, [selectedGenre, selectedYear, selectedRating, selectedMood]);
 
   const years = Array.from({ length: 30 }, (_, i) => (new Date().getFullYear() - i).toString());
 
@@ -77,6 +78,26 @@ const Explore = () => {
             <SlidersHorizontal size={18} className={showFilters ? 'text-primary' : ''} />
             {showFilters ? 'Hide Filters' : 'Show Filters'}
           </button>
+        </div>
+
+        {/* Mood Selector */}
+        <div className="flex flex-wrap gap-4 mb-12 animate-fade-in">
+          {moods.map(mood => (
+            <button
+              key={mood.id}
+              onClick={() => setSelectedMood(selectedMood === mood.id ? '' : mood.id)}
+              className={`flex items-center gap-3 px-6 py-4 rounded-2xl border transition-all duration-300 group ${
+                selectedMood === mood.id 
+                  ? 'bg-primary border-primary shadow-lg shadow-primary/20 scale-105' 
+                  : 'bg-zinc-900 border-white/5 hover:border-white/10'
+              }`}
+            >
+              <span className="text-2xl group-hover:scale-125 transition-transform">{mood.icon}</span>
+              <span className={`font-bold uppercase tracking-tighter text-sm ${selectedMood === mood.id ? 'text-white' : 'text-zinc-400'}`}>
+                {mood.name}
+              </span>
+            </button>
+          ))}
         </div>
 
         {/* Filters Panel */}
